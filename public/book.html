@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="author" content="Chenzf">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <script src="http://cdn.bootcss.com/jquery/2.2.2/jquery.min.js"></script>
+    <script src="http://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.js"></script>
+    <title>书籍列表</title>
+</head>
+<style>
+    th,
+    tr {
+        text-align: center;
+    }
+
+    .butt {
+        padding: 30px 0;
+    }
+</style>
+
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"
+                    aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+                <a class="navbar-brand" href="#">图书列表</a>
+            </div>
+    </nav>
+    <div style="padding-top:51px;">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>图片</th>
+                    <th>书名</th>
+                    <th>作者</th>
+                    <th>出版社</th>
+                    <th>价格</th>
+                </tr>
+            </thead>
+            <tbody id="write">
+
+            </tbody>
+        </table>
+        <div class="container butt">
+            <button class="btn btn-info btn-block" onclick="getData()">下一页</button>
+        </div>
+    </div>
+</body>
+<script src="/template.js"></script>
+<!--前端模版引擎的使用-->
+<script type="text/html" id="writeData">
+    {{each books}}
+    <tr>
+        <td>{{currentPage*10+($index+1)}}</td>
+        <td><img src="{{$value.image}}" alt=""></td>
+        <td>{{$value.name}}</td>
+        <td>{{$value.author}}</td>
+        <td>{{$value.publisher}}</td>
+        <td>{{$value.price}}</td>
+    </tr>
+    {{/each}}
+</script>
+<script>
+    //定义一个全局变量
+    var currentPage = 0;
+    // 初始化加载页面
+    bookData(currentPage);
+    function getData() {
+        bookData(currentPage);
+    }
+    function bookData(page) {
+        $.ajax({
+            url: '/api/v1/book_data/'+ page,
+            type: 'get',
+            dataType: 'json',
+            success: function (res) {
+                // console.log(res.books);
+                var books = res.books;
+                //修改当前页面
+                currentPage = res.page * 1;
+                //方法2
+                var htmlStr = template('writeData', { books: books,currentPage:page });
+                //将数据渲染到视图中
+                $('#write').append(htmlStr);
+            },
+            error: function (err) {
+                console.dir(err);
+            }
+        });
+    }
+    // $.ajax({
+    //     url: '/api/v1/book_data/1',
+    //     type: 'get',
+    //     dataType: 'json',
+    //     success: function (res) {
+    //         //     var tbody = document.querySelector('#write');
+    //         //    for(var i=0;i<res.books.length;i++){
+    //         //         tbody.innerHTML += '<tr>'+'<td>'+res.books[i]._id+'</td>'+'<td>'+res.books[i].image+'</td>'+'<td>'+res.books[i].name+'</td>'+'<td>'+res.books[i].author+'</td>'+'<td>'+res.books[i].publisher+'</td>'+'<td>'+res.books[i].price+'</td>'+'<td>'+res.books[i].type+'</td>'+'</tr>'
+    //         //     }
+
+
+
+    //         var books=res.books;
+    //         // var htmlStr='';
+    //         // books.forEach(function(item,index){
+    //         //     var temp=`<tr>
+    //         //     <td>${index+1}</td>
+    //         //     <td><img src="${item.image}"></td>
+    //         //     <td>${item.name}</td>
+    //         //     <td>${item.author}</td>
+    //         //     <td>${item.publisher}</td>
+    //         //     <td>${item.price}</td>
+    //         //     <td>${item.type}</td>
+    //         //     </tr>`
+    //         //     htmlStr+=temp;
+    //         // });
+    //         // $('#write').html(htmlStr);
+
+
+    //         var htmlStr = template('writeData', { books: books });
+    //         $('#write').html(htmlStr);
+    //     },
+    //     error: function (err) {
+    //         console.dir(err);
+
+    //     }
+    // })
+
+</script>
+
+</html>
