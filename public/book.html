@@ -41,7 +41,7 @@
             <thead>
                 <tr>
                     <th>序号</th>
-                    <th>图片</th>
+                    <th>分类</th>
                     <th>书名</th>
                     <th>作者</th>
                     <th>出版社</th>
@@ -63,7 +63,7 @@
     {{each books}}
     <tr>
         <td>{{currentPage*10+($index+1)}}</td>
-        <td><img src="{{$value.image}}" alt=""></td>
+        <td>{{$value.type}}</td>
         <td>{{$value.name}}</td>
         <td>{{$value.author}}</td>
         <td>{{$value.publisher}}</td>

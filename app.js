@@ -21,7 +21,6 @@ db.connect('mongodb://localhost/DDBook');
 
 var bookSchema = db.Schema({
     name: String,
-    image: String,
     author: String,
     link: String,
     publisher: String,
