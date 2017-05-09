@@ -21,6 +21,7 @@ db.connect('mongodb://localhost/DDBook');
 
 var bookSchema = db.Schema({
     name: String,
+    image: String,
     author: String,
     link: String,
     publisher: String,
@@ -69,8 +70,8 @@ app.get('/list/:page?',(req,res)=>{
         }else{
             res.render('list',{books:data,cPage:currentPage,totalPage:totalPage,pages:pages});
         }
-    })
-   }) .limit(10).skip(currentPage*10);
+    }).limit(10).skip((currentPage-1)*perPage);
+   });
 });
 
 

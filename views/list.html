@@ -19,6 +19,10 @@
         .butt {
             padding: 30px 0;
         }
+        #img{
+            width: 2rem;
+            height: 2rem;
+        }
     </style>
 </head>
 
@@ -41,46 +45,69 @@
             <thead>
                 <tr>
                     <th>序号</th>
-                    <th>分类</th>
+                    <th>图片</th>
                     <th>书名</th>
                     <th>作者</th>
                     <th>出版社</th>
                     <th>价格</th>
+                    <th>分类</th>
                 </tr>
             </thead>
             <tbody id="write">
                 {{each books}}
                 <tr>
                     <td>{{$index+1}}</td>
-                    <td>{{$value.type}}</td>
+                    <td id="img"><img src="{{$value.image}}" alt=""></td>
                     <td>{{$value.name}}</td>
                     <td>{{$value.author}}</td>
                     <td>{{$value.publisher}}</td>
                     <td>{{$value.price}}</td>
+                    <td>{{$value.type}}</td>
                 </tr>
                 {{/each}}
             </tbody>
         </table>
         <div class="container butt">
             <nav aria-label="Page navigation">
-                <ul class="pagination">
+                <ul class="pagination pagination-lg">
+                    {{if cPage > 1}}
                     <li>
-                        <a href="#" aria-label="Previous">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
+                        <a href="/list/{{cPage-1}}" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
                     </li>
-                    <li><a href="#">1</a></li>
-                    <li><a href="#">2</a></li>
-                    <li><a href="#">3</a></li>
-                    <li><a href="#">4</a></li>
-                    <li><a href="#">5</a></li>
+                    {{else}}
+                      <li class="disabled">
+                        <a aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    {{/if}}
+                    
+                   {{each pages}}
+                   {{if $value == cPage}}
+                    <li class="active"><a href="/list/{{$value}}">{{$value}}</a></li>
+                    {{else}}
+                    <li><a href="/list/{{$value}}">{{$value}}</a></li>
+                    {{/if}}
+                    {{/each}}
+
+                    {{if cPage < totalPage}}
                     <li>
-                        <a href="#" aria-label="Next">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
+                        <a href="/list/{{cPage+1}}" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
                     </li>
+                    {{else}}
+                      <li class="disabled">
+                        <a aria-label="Previous">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                    {{/if}}
                 </ul>
             </nav>
+
         </div>
     </div>
 </body>
